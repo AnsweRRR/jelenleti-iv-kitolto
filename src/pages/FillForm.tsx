@@ -44,7 +44,7 @@ async function fillPdf(
   const sigDims = sigImage.scale(1);
 
   const sigMaxWidth = 50;  // a cella szélessége kb. 60 körül van
-  const sigMaxHeight = 12; // a cella magassága kb. 14px
+  const sigMaxHeight = 14; // a cella magassága kb. 14px
   const scale = Math.min(sigMaxWidth / sigDims.width, sigMaxHeight / sigDims.height);
 
   // signature kép mérete
@@ -76,7 +76,6 @@ async function fillPdf(
     let leave = "";
     let worked = "";
     let note = "";
-    // const signature = defaults.signature;
 
     if (type === "leave") {
       note = "Szabadság";
@@ -93,7 +92,6 @@ async function fillPdf(
     page.drawText(arrival, { x: xArrival, y, size: 8, font, color: color });
     page.drawText(leave, { x: xLeave, y, size: 8, font, color: color });
     page.drawText(worked, { x: xWorked, y, size: 8, font, color: color });
-    // page.drawText(signature, { x: xSignature, y, size: 8, font, color: color });
     page.drawImage(sigImage, {
       x: xSignature,
       y: y - 2, // egy kicsit lejjebb, hogy szépen álljon a sor közepén
@@ -224,17 +222,9 @@ export default function FillForm() {
   ];
 
   useEffect(() => {
-    // default-data.json betöltése csak ha nincs config
     getConfig().then((saved: import("../components/ConfigDialog").Defaults | null) => {
       if (saved) {
         setDefaults(saved);
-      } else {
-        fetch("/default-data.json")
-          .then((res) => res.json())
-          .then((data) => setDefaults(data))
-          .catch((err) =>
-            console.error("Nem sikerült betölteni a default-data.json-t", err)
-          );
       }
     });
   }, []);
