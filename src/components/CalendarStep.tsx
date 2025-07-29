@@ -75,6 +75,7 @@ export default function CalendarStep({
             return (
               <PickersDay
                 {...dayProps}
+                selected={false}
                 sx={{
                   bgcolor: bgColor,
                   color: dayType ? "white" : undefined,
