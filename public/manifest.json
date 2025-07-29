@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Jelenléti ív kitöltő",
+  "version": "1.0.0",
+  "description": "React alapú jelenléti ív kitöltő Chrome bővítmény.",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [],
+  "icons": {
+    "16": "/favicon/icon16.png",
+    "48": "/favicon/icon48.png",
+    "128": "/favicon/icon128.png"
+  }
+} 
