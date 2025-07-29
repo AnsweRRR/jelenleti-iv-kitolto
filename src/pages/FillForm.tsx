@@ -8,7 +8,6 @@ import {
   Container
 } from "@mui/material";
 import FileUploadStep from "../components/FileUploadStep";
-import DataStep from "../components/DataStep";
 import CalendarStep from "../components/CalendarStep";
 import GenerateStep from "../components/GenerateStep";
 import AppHeader from "../components/AppHeader";
@@ -158,7 +157,7 @@ export default function FillForm() {
     setLoading(true);
 
     if (!defaults.signature) {
-      alert("Nincs feltöltve aláírás! Tölts fel egy PNG-t az Alapadatok lépésben.");
+      alert("Nincs feltöltve aláírás!");
       setLoading(false);
       return;
     }
@@ -199,10 +198,6 @@ export default function FillForm() {
     {
       label: "Fájl feltöltése",
       content: <FileUploadStep onFileSelected={setFile} file={file} />
-    },
-    {
-      label: "Alapadatok",
-      content: <DataStep defaults={defaults} setDefaults={setDefaults} />
     },
     {
       label: "Napok kijelölése",
