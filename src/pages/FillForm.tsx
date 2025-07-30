@@ -244,6 +244,7 @@ export default function FillForm() {
             p: 3,
             boxShadow: 3,
             margin: "0 10px",
+            height: "100%"
           }}
         >
           <Stepper activeStep={activeStep} nonLinear orientation="vertical">

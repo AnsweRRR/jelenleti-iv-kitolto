@@ -22,6 +22,20 @@ export default function App() {
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={hu}>
         <div style={backgroundStyle}></div>
         <FillForm />
+
+        <img
+          src="/footer-image.png"
+          alt="Footer"
+          style={{
+            position: "fixed",
+            bottom: 10,
+            left: "50%",
+            transform: "translateX(-50%)",
+            maxWidth: "100%",
+            zIndex: 1000,
+            pointerEvents: "none"
+          }}
+        />
       </LocalizationProvider>
     </>
   );
