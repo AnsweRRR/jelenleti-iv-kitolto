@@ -12,7 +12,6 @@ jobs:
       VITE_HOLIDAY_API_KEY: ${{ secrets.VITE_HOLIDAY_API_KEY }}
     permissions:
       contents: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,14 +43,12 @@ jobs:
 
       - name: Get new version
         id: get_version
-        run: |
-          echo "version=$(node -p 'require(\"./package.json\").version')" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p 'require(\"./package.json\").version')" >> $GITHUB_OUTPUT
 
       - name: Generate release notes
         id: release_notes
         run: |
-          notes=$(git log --pretty=format:'%s' $(git describe --tags --abbrev=0)..HEAD | sed ':a;N;$!ba;s/\n/\\n/g')
-          printf "notes=%s\n" "$notes" >> "$GITHUB_OUTPUT"
+          echo "notes=$(git log --pretty=format:'%s' $(git describe --tags --abbrev=0)..HEAD)" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
