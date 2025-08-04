@@ -43,11 +43,10 @@ async function fillPdf(
   const sigImage = await pdfDoc.embedPng(signatureBytes);
   const sigDims = sigImage.scale(1);
 
-  const sigMaxWidth = 50;  // a cella szélessége kb. 60 körül van
-  const sigMaxHeight = 14; // a cella magassága kb. 14px
+  const sigMaxWidth = 50;
+  const sigMaxHeight = 14;
   const scale = Math.min(sigMaxWidth / sigDims.width, sigMaxHeight / sigDims.height);
 
-  // signature kép mérete
   const sigWidth = sigDims.width * scale;
   const sigHeight = sigDims.height * scale;
 
@@ -63,14 +62,14 @@ async function fillPdf(
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth() + 1;
 
-  for (let nap = 1; nap <= 31; nap++) {
-    const date = new Date(year, month - 1, nap);
+  for (let day = 1; day <= 31; day++) {
+    const date = new Date(year, month - 1, day);
     const weekday = date.getDay();
     if (weekday === 0 || weekday === 6) {
       continue;
     }
 
-    const type = dayTypes.get(nap);
+    const type = dayTypes.get(day);
 
     let arrival = "";
     let leave = "";
@@ -87,17 +86,12 @@ async function fillPdf(
       worked = defaults.worked;
     }
 
-    const y = yTop - (nap - 1) * rowHeight;
+    const y = yTop - (day - 1) * rowHeight;
 
     page.drawText(arrival, { x: xArrival, y, size: 8, font, color: color });
     page.drawText(leave, { x: xLeave, y, size: 8, font, color: color });
     page.drawText(worked, { x: xWorked, y, size: 8, font, color: color });
-    page.drawImage(sigImage, {
-      x: xSignature,
-      y: y - 2, // egy kicsit lejjebb, hogy szépen álljon a sor közepén
-      width: sigWidth,
-      height: sigHeight
-    });
+    page.drawImage(sigImage, { x: xSignature, y: y - 2, width: sigWidth, height: sigHeight });
     page.drawText(note, { x: xNote, y, size: 8, font, color: color });
   }
 
@@ -240,7 +234,6 @@ export default function FillForm() {
           maxWidth="md"
           sx={{
             bgcolor: "rgba(255,255,255,0.85)",
-            borderRadius: 2,
             p: 3,
             boxShadow: 3,
             margin: "0 10px",

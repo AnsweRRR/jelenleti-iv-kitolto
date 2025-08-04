@@ -1,5 +1,12 @@
-import { DateCalendar, PickersDay, type PickersDayProps } from "@mui/x-date-pickers";
+import { useEffect, useState } from "react";
+import {
+  DateCalendar,
+  PickersDay,
+  type PickersDayProps
+} from "@mui/x-date-pickers";
+import { format } from "date-fns";
 import { Box, Typography, Stack } from "@mui/material";
+import { getHolidaysForYear } from "../utils/holidays";
 
 interface Props {
   dayTypes: Map<number, "leave" | "sick">;
@@ -9,6 +16,8 @@ interface Props {
   clearSelectedDays: () => void;
 }
 
+const HOLIDAY_API_KEY = "4ae58b98aca8b21f41ff7dc000ff8f1e8e8ba53e4282efd6fa9cf916ed5d1408";
+
 export default function CalendarStep({
   dayTypes,
   toggleDayType,
@@ -16,6 +25,32 @@ export default function CalendarStep({
   setCurrentMonth,
   clearSelectedDays
 }: Props) {
+  const [holidays, setHolidays] = useState<Set<string>>(new Set());
+  const [workdays, setWorkdays] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const year = currentMonth.getFullYear();
+
+    getHolidaysForYear(HOLIDAY_API_KEY, year)
+      .then((days) => {
+        const holidaysSet = new Set<string>();
+        const workdaysSet = new Set<string>();
+
+        for (const day of days) {
+          if (day.type === '1') {
+            holidaysSet.add(day.date);
+          }
+          else if (day.type === '2') {
+            workdaysSet.add(day.date);
+          }
+        }
+
+        setHolidays(holidaysSet);
+        setWorkdays(workdaysSet);
+      })
+      .catch((err) => console.error("Munkaszüneti napok lekérdezési hiba:", err));
+  }, [currentMonth]);
+
   return (
     <Box sx={{ width: "100%", maxWidth: 260 }}>
       <Stack direction="row" spacing={1} sx={{ mb: 1, fontSize: 12 }}>
@@ -54,21 +89,27 @@ export default function CalendarStep({
             "& .MuiIconButton-root": { padding: "2px" }
           },
           "& .MuiDayCalendar-weekDayLabel": {
-            fontSize: "0.7rem"
+            fontSize: "0.7rem",
+            width: 26
           }
         }}
         slots={{
           day: (dayProps: PickersDayProps) => {
             const day = dayProps.day;
-            const dayType = dayTypes.get(day.getDate());
+            const dateStr = format(day, "yyyy-MM-dd");
             const isWknd = day.getDay() === 0 || day.getDay() === 6;
+            const isHoliday = holidays.has(dateStr);
+            const isShiftedWorkday = workdays.has(dateStr);
 
-            let bgColor;
+            const dayType = dayTypes.get(day.getDate());
+
+            let bgColor: string | undefined;
+
             if (dayType === "leave") {
               bgColor = "primary.main";
             } else if (dayType === "sick") {
               bgColor = "gold";
-            } else if (isWknd) {
+            } else if ((isWknd || isHoliday) && !isShiftedWorkday) {
               bgColor = "rgba(255,0,0,0.15)";
             }
 
