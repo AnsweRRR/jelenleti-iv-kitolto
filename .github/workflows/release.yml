@@ -12,6 +12,7 @@ jobs:
       VITE_HOLIDAY_API_KEY: ${{ secrets.VITE_HOLIDAY_API_KEY }}
     permissions:
       contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -49,7 +50,11 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
-          echo "notes=$(git log --pretty=format:'%s' $(git describe --tags --abbrev=0)..HEAD)" >> $GITHUB_OUTPUT
+          {
+            echo "notes<<EOF"
+            git log --pretty=format:'%s' $(git describe --tags --abbrev=0)..HEAD
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
