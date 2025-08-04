@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { Box, Typography, Stack } from "@mui/material";
+import { format } from "date-fns";
 import {
   DateCalendar,
   PickersDay,
   type PickersDayProps
 } from "@mui/x-date-pickers";
-import { format } from "date-fns";
-import { Box, Typography, Stack } from "@mui/material";
-import { getHolidaysForYear } from "../utils/holidays";
 
 interface Props {
   dayTypes: Map<number, "leave" | "sick">;
@@ -14,42 +12,20 @@ interface Props {
   currentMonth: Date;
   setCurrentMonth: (date: Date) => void;
   clearSelectedDays: () => void;
+  holidays: Set<string>;
+  workdays: Set<string>;
 }
-
-const HOLIDAY_API_KEY = "4ae58b98aca8b21f41ff7dc000ff8f1e8e8ba53e4282efd6fa9cf916ed5d1408";
 
 export default function CalendarStep({
   dayTypes,
   toggleDayType,
   currentMonth,
   setCurrentMonth,
-  clearSelectedDays
+  clearSelectedDays,
+  holidays,
+  workdays
 }: Props) {
-  const [holidays, setHolidays] = useState<Set<string>>(new Set());
-  const [workdays, setWorkdays] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    const year = currentMonth.getFullYear();
-
-    getHolidaysForYear(HOLIDAY_API_KEY, year)
-      .then((days) => {
-        const holidaysSet = new Set<string>();
-        const workdaysSet = new Set<string>();
-
-        for (const day of days) {
-          if (day.type === '1') {
-            holidaysSet.add(day.date);
-          }
-          else if (day.type === '2') {
-            workdaysSet.add(day.date);
-          }
-        }
-
-        setHolidays(holidaysSet);
-        setWorkdays(workdaysSet);
-      })
-      .catch((err) => console.error("Munkaszüneti napok lekérdezési hiba:", err));
-  }, [currentMonth]);
+  // Törlöm a useState és useEffect részt, ami lekéri a szünnapokat
 
   return (
     <Box sx={{ width: "100%", maxWidth: 260 }}>
