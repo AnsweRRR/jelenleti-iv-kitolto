@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_HOLIDAY_API_KEY: ${{ secrets.VITE_HOLIDAY_API_KEY }}
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,6 +33,7 @@ jobs:
           npm version patch --no-git-tag-version
           git add package.json package-lock.json
           git commit -m "Bump version [skip ci]"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push
 
       - name: Build project
