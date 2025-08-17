@@ -50,17 +50,7 @@ A PDF sablon feltöltése után megadhatóak az alapadatok (munkaidő, aláírá
 
 ## 🔧 Testreszabás
 
-### Alapértelmezett adatok
-Az `public/default-data.json` fájlban találhatók:
-```json
-{
-  "arrival": "8:00",
-  "leave": "16:30",
-  "worked": "8",
-  "signature": "Gipsz Jakab"
-}
-```
-Ezeket a felhasználó a **fogaskerék ikonra kattintva** felül tudja írni. A változtatások automatikusan elmentődnek a böngésző `localStorage`-jába.
+A felhasználó a **fogaskerék ikonra kattintva** be tudja írni az adatokat. A változtatások automatikusan elmentődnek a böngésző `localStorage`-jába.
 
 ### Aláírás
 - Feltölthető egy saját aláírás PNG fájl.
@@ -101,21 +91,6 @@ Az alkalmazás az [szunetnapok.hu](https://szunetnapok.hu) API-ját használja a
 - **UI könyvtárak**: [MUI](https://mui.com/), [MUI X Date Pickers](https://mui.com/x/react-date-pickers/)  
 - **PDF kezelés**: [pdf-lib](https://pdf-lib.js.org/)  
 - **Dátum kezelés**: [date-fns](https://date-fns.org/)  
-
-Projekt felépítése:
-```
-src/
- ├── components/   # újrafelhasználható komponensek (FileUploadStep, DataStep, CalendarStep, stb.)
- ├── pages/        # oldalak (FillForm)
- ├── utils/        # segédfüggvények (pl. holidays.ts)
- ├── App.tsx       # belépési pont
-public/
- ├── default-data.json   # alapadatok
- ├── background.jpg      # háttér
- ├── footer-image.png    # lábléc kép
-```
-
----
 
 ## 📜 Licenc
 
