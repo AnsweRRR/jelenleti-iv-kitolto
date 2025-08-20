@@ -46,6 +46,8 @@ export default function CalendarStep({
           setCurrentMonth(newMonth);
           clearSelectedDays();
         }}
+        minDate={new Date(new Date().getFullYear(), new Date().getMonth() - 2, 1)}
+        maxDate={new Date(new Date().getFullYear(), new Date().getMonth() + 2, 31)}
         sx={{
           height: "auto !important",
           maxHeight: "none !important",

@@ -14,6 +14,7 @@ import AppHeader from "../components/AppHeader";
 import ConfigDialog from "../components/ConfigDialog";
 import { getConfig, setConfig } from "../utils/configStorage";
 import { getHolidaysForYear } from "../utils/holidays";
+import { loadDayTypes, saveDayTypes } from "../utils/calendarStorage";
 
 const contentStyle: React.CSSProperties = {
   position: 'fixed',
@@ -36,9 +37,9 @@ export default function FillForm() {
   const [file, setFile] = useState<File | null>(null);
   const [configOpen, setConfigOpen] = useState(false);
 
-  const [dayTypes, setDayTypes] = useState<Map<number, "leave" | "sick">>(
-    new Map()
-  );
+  const [dayTypes, setDayTypes] = useState<Map<number, "leave" | "sick">>(() => {
+    return loadDayTypes(new Date().getFullYear(), new Date().getMonth() + 1);
+  });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
@@ -224,7 +225,13 @@ export default function FillForm() {
       setHolidays(holidaysSet);
       setWorkdays(workdaysSet);
     });
+
+    setDayTypes(loadDayTypes(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
   }, [currentMonth]);
+
+  useEffect(() => {
+    saveDayTypes(currentMonth.getFullYear(), currentMonth.getMonth() + 1, dayTypes);
+  }, [dayTypes, currentMonth]);
 
   const steps = [
     {
